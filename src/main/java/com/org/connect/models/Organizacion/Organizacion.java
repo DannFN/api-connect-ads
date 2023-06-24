@@ -8,11 +8,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.org.connect.models.OfertaLaboral.OfertaLaboral;
+import com.org.connect.models.Representante.Representante;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Entity(name = "organizacion")
 public class Organizacion {
     @Id
@@ -37,6 +41,11 @@ public class Organizacion {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organizacion")
     private List<OfertaLaboral> ofertas;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "organizacion")
+    private List<Representante> representantes;
 }

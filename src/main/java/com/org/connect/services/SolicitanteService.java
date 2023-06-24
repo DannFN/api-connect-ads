@@ -12,6 +12,7 @@ import com.org.connect.repositories.AreaRepository;
 import com.org.connect.repositories.CompetenciaRepository;
 import com.org.connect.repositories.EscuelaRepository;
 import com.org.connect.repositories.IdiomaRepository;
+import com.org.connect.repositories.OfertaLaboralRepository;
 import com.org.connect.repositories.SolicitanteRepository;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class SolicitanteService {
     private final EscuelaRepository escuelaRepository;
     private final IdiomaRepository idiomaRepository;
     private final CompetenciaRepository competenciaRepository;
+    private final OfertaLaboralRepository ofertaLaboralRepository;
 
     public List<Solicitante> getSolicitantes() {
         return solicitanteRepository.findAll();
@@ -35,6 +37,12 @@ public class SolicitanteService {
 
     public Optional<Solicitante> getSolicitante(long id) {
         return solicitanteRepository.findById(id);
+    }
+
+    public Solicitante solicitarOferta(long solicitante, long oferta) {
+        var solicitanteToUpdate = solicitanteRepository.findById(solicitante).get();
+        solicitanteToUpdate.getOfertas().add(ofertaLaboralRepository.findById(oferta).get());
+        return solicitanteRepository.save(solicitanteToUpdate);
     }
 
     public Solicitante saveSolicitante(PersonaRequestDTO solicitanteRequest) {

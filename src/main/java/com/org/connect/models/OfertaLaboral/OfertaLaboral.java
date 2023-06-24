@@ -12,10 +12,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.org.connect.models.Area;
 import com.org.connect.models.Competencia;
 import com.org.connect.models.Organizacion.Organizacion;
+import com.org.connect.models.Solicitante.Solicitante;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -50,7 +53,23 @@ public class OfertaLaboral {
     @Column(name = "longitud")
     private double longitud;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "ofertas")
+    private Set<Solicitante> solicitantes;
+
+    @Builder
+    public OfertaLaboral(String titulo, String descripcion, String salario, Set<Competencia> competencias, Area area, double latitud, double longitud, Organizacion organizacion) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.salario = salario;
+        this.area = area;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.organizacion = organizacion;
+    }
 }

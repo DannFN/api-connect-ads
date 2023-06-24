@@ -13,10 +13,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.org.connect.models.Area;
 import com.org.connect.models.Competencia;
 import com.org.connect.models.Escuela;
 import com.org.connect.models.Idioma;
+import com.org.connect.models.OfertaLaboral.OfertaLaboral;
 import com.org.connect.models.Persona.Persona;
 
 import lombok.Builder;
@@ -66,6 +68,13 @@ public class Solicitante extends Persona {
     private double latitud;
     @Transient
     private double longitud;
+
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "solicitante_oferta", 
+            joinColumns = @JoinColumn(name = "solicitante_id"), 
+            inverseJoinColumns = @JoinColumn(name = "oferta_id"))
+    private Set<OfertaLaboral> ofertas;
 
     @Builder
     public Solicitante(String nombre, String primerApellido, String segundoApellido, String email, String telefono,
